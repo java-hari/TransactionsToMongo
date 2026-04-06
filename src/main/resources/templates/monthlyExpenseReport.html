@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Family Expense</title>
+</head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}" />
+<link th:rel="stylesheet"
+	th:href="@{webjars/bootstrap/4.5.0/css/bootstrap.min.css} " />
+<link th:rel="stylesheet"
+	th:href="@{webjars/font-awesome/5.14.0/css/all.css} " />
+<link rel="stylesheet" th:href="@{/css/headder.css}"></link>
+
+<!-- <script type="text/javascript" src="/bootstrap/4.5.0/css/bootstrap.css"></script> -->
+<body>
+	<!-- Header Section -->
+	<header th:replace="headderTitle.html :: header"> </header>
+
+	<!-- Menu Navigation Bar -->
+	<div class="menu">
+		<menu th:replace="headderMenu.html :: menu"> </menu>
+	</div>
+
+		<div class="container">
+				<div class="row">
+					<div class="col-lg-10 mt-5">
+						<!-- <form action="#" th:action="@{userDetails}"
+					th:object="${userResult}" method="post"> -->
+						<div th:if="${not #lists.isEmpty(AllExpenseBySource)}">
+
+							<div class="form-group">
+								<table border="2" id="monthlyExpenseStats">
+									<tr align="center" bgcolor="b5fa0b">
+										<td width="130px"><b><label for="source">Source Details</label></b></td>
+										<td width="150px"><b><label for="TranAmt">Amount</label></b></td>
+										<td width="130px"><b><label for="TotalAmt">Month</label></b></td>
+										<td width="130px"><b><label for="availableAmt">Transactions</label></b></td>
+										<!-- <td width="130px"><b><label for="transactionType">transactionType</label></b></td> -->
+										
+									</tr>
+
+									<tr th:each="itmData : ${AllExpenseBySource}" th:style="${itmData.source.equals('Gas') } ? 'background-color: lightblue;' : 'background-color: lightgray;'">
+									
+										<td th:text="${itmData.source}"></td>
+										<td align="right" th:text="${#numbers.formatCurrency(itmData.amount)}">
+										<td align="center" th:text="${itmData.month}"></td>
+										<td align="center" th:text="${itmData.transactions}"></td>
+										
+										<!--<td th:text="${new java.text.DecimalFormat('$#,##0.00;(-$#,##0.00)').format(itmData.itemPrice)}"></td>-->
+									<!-- <td th:text="${itmData.transactionType}"></td> -->
+									</tr>
+
+								</table>
+
+
+							</div>
+						</div>
+						<div><div class="row" th:fragment="pagination">
+       
+        <div class="col-md-5">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:each="pageNumber : ${pageNumbers}" >
+                        <a class="page-link" th:href="@{/monthlyExpenseReport(loginUser=${loginUser}, size=${monthlyExpenseResult.size}, page=${pageNumber})}" th:text=${pageNumber} >1</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+       <!-- <div class="col-md-2">Total Items : [[${totalElements}]]</div>-->
+    </div>
+						<!-- Total No. Pages :  [[${totalPages}]]  And Total No. Records: [[${totalElements}]] -->
+						</div>
+						<!-- <span th:>
+						
+						</span>
+						<div class="form-group">
+							<a href="#" th:href="@{/}">Login</a>
+
+						</div> -->
+
+						<!-- </form> -->
+					</div>
+				</div>
+			</div>
+	
+
+
+	<!-- Footer Section -->
+	<footer>Footer Section</footer>
+
+	<!-- <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script> -->
+
+</body>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const table = document.getElementById('monthlyExpenseStats'); // Assuming your table has an ID 'myTable'
+
+      if (table) {
+        Array.from(table.rows).forEach(row => {
+          Array.from(row.cells).forEach(cell => {
+            const cellValue = cell.innerText; // Get the text content of the cell
+            
+            if (cellValue === 'Error') {
+              row.classList.add('color-red'); // Add red background to the row
+            } else if (cellValue === 'Success') {
+              row.classList.add('color-green'); // Add green background to the row
+            }
+            // Add more conditions as needed
+          });
+        });
+      }
+    });
+    </script>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Family Expense</title>
+</head>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}" />
+<link th:rel="stylesheet"
+	th:href="@{webjars/bootstrap/4.5.0/css/bootstrap.min.css} " />
+<link th:rel="stylesheet"
+	th:href="@{webjars/font-awesome/5.14.0/css/all.css} " />
+<link rel="stylesheet" th:href="@{/css/headder.css}"></link>
+
+<!-- <script type="text/javascript" src="/bootstrap/4.5.0/css/bootstrap.css"></script> -->
+<body>
+	<!-- Header Section -->
+	<header th:insert="headderTitle.html :: header"> </header>
+	
+	<!-- Menu Navigation Bar -->
+	<div class="menu">
+	<menu th:insert="headderMenu.html :: menu"> </menu>
+	</div>
+	
+
+	<!-- Body section -->
+	<div class="body_sec">
+		<!-- <div class="dropdown" style="float: left;">
+			<button class="dropbtn">Stock</button>
+			<div class="dropdown-content" style="left: 0;">
+				<a href="#" th:href="@{/addItemSave}">Add On Stock</a> <a href="#"
+					th:href="@{/resultItem}">Keep Track Of </a> <a href="#">Link 3</a>
+			</div>
+		</div> -->
+
+		<section id="Content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 mt-1">
+						<form th:action="@{addExpenseItem}"	th:object="${dailyExpenseDetails}" method="post" onsubmit="return validateForm()">
+							<div class="form-group">
+								<div class="row">
+									<div class="col-lg-2 mt-5">
+										<label for="source">Source Name</label>
+									</div>
+									
+									<div class="col-md-4 mt-5">
+										<div th:if="${not #lists.isEmpty(masterSource)}">
+											<select class="form-control" th:field ="*{source}" id="sourceSelect" name="sourceSelect" autofocus="autofocus">
+												<option value="">Select Source</option>
+												<option th:each="test : ${masterSource}" th:value="${test.name}" th:text="${test.id}+' : '+${test.name}"></option>
+											</select>
+										</div>
+										<!-- <div class="input-group">
+											<input type="text" class="form-control" id="source"
+												autocomplete="off" th:field="*{source}" />
+										</div> -->
+									</div>
+									<div class="col-md-4 mt-5">
+										<div class="input-group">
+											<b><span id="sourceSelectError" class="error"></span></b>											
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-2 mt-4">
+										<label for="itemName">Item Name</label>
+									</div>
+									<div class="col-md-4 mt-4">
+										<div class="input-group">
+											<input type="text" class="form-control" id="itemName" autocomplete="off" th:field="*{itemName}" />	
+										</div>
+									</div>
+									<div class="col-md-4 mt-4">
+										<div class="input-group">
+											<b><span id="itemNameError" class="error"></span></b>											
+										</div>
+									</div>
+									
+								</div>
+								<div class="row">
+									<div class="col-lg-2 mt-4">
+										<label for="itemPrice">Item Price</label>
+									</div>
+									<div class="col-md-4 mt-4">
+										<div class="input-group">
+											<input type="text" class="form-control" id="itemPrice" autocomplete="off" th:field="*{itemPrice}" />
+										</div>
+									</div>
+									<div class="col-md-4 mt-4">
+										<div class="input-group">
+											<b><span id="itemPriceError" class="error"></span></b>											
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-2 mt-4">
+										<label for="transactionType">Transaction Type</label>
+									</div>
+									<div class="col-md-2 mt-4">
+										<div class="input-group">
+											<input type="radio" class="custom-control custom-radio custom-control-inline" th:field="*{transactionType}" id="transactionType1" value = "CR" />
+												<label for="transactionType1">Credit</label>
+										</div>
+									</div>
+									<div class="col-md-2 mt-4">
+										<div class="input-group">
+											<input type="radio" class="custom-control custom-radio custom-control-inline" th:field="*{transactionType}" id="transactionType2" value = "DB" checked="checked"/>
+												<label for="transactionType2">Debt</label>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-2 mt-4">
+										<label for="transactionDate">Transaction Date</label>
+									</div>
+									<div class="col-md-4 mt-4">										
+										<div class="input-group">
+											<input type="datetime-local" class="form-control" id="transactionDate" th:field="*{transactionDate}" />
+											
+									<!--<input type="datetime-local" class="form-control" id="transactionDate" th:field="*{transactionDate}" th:text="${#dates.format(transactionDate, 'yyyy-MM-dd hh:mm')}" />-->
+											<!-- <input type="text" class="form-control" id="transactionDate"
+												autocomplete="off" th:field="*{transactionDate}" /> -->
+										</div>
+									</div>
+									
+									
+								</div> 
+							</div>
+
+							<div class="form-group">
+								<button class="btn btn-primary" type="submit">Add Item</button>
+								<button class="btn btn-primary" type="reset">Cancel</button>
+							</div>
+
+
+						</form>
+					</div>
+					
+				</div>
+			</div>
+
+		</section>
+	</div>
+	
+	<div th:switch="${message}">
+    <div th:case="'Success'" class="alert alert-success">
+        <strong>Success!</strong> Operation performed successfully.
+    </div>
+    <div th:case="'Failed'" class="alert alert-danger">
+        <strong>Failure!</strong> Operation failed. Please try again 
+    </div>
+    
+</div>
+
+	<!-- Footer Section -->
+	<footer>Footer Section</footer>
+
+	<!-- <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script> -->
+
+<script th:inline="javascript">
+	
+	
+formOnLoad();
+function formOnLoad(){
+	document.getElementById("transactionType2").checked = true;
+	//document.getElementById('transactionDate').valueAsDate = new Date()
+	
+	window.onload = function() {
+	       const now = new Date();
+	       // Adjust for timezone offset
+	       now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+	       // Format to yyyy-mm-ddThh:mm
+	       document.getElementById('transactionDate').value = now.toISOString().slice(0, 16);
+	   };
+}
+        function validateForm() {
+            let isValid = true;
+            
+         // Source validation
+            const sourceInput = document.getElementById("sourceSelect");
+            const sourceError = document.getElementById("sourceSelectError");
+            if (sourceInput.value.trim() === "") {
+                sourceError.textContent = "Select Source Of Transaction";
+                isValid = false;
+            } else {
+                sourceError.textContent = "";
+            }
+
+            // Item Name validation
+            const nameInput = document.getElementById("itemName");
+            const nameError = document.getElementById("itemNameError");
+            if (nameInput.value.trim() === "") {
+                nameError.textContent = "Item Name is required";
+                isValid = false;
+            } else {
+                nameError.textContent = "";
+            }
+            
+            // transactionDate
+            /* const transactionDateInput = document.getElementById("transactionDate").value;
+            
+            alert(transactionDateInput);
+            isValid = false; */
+        
+
+            // Email validation
+            /* const emailInput = document.getElementById("itemPrice");
+            const emailError = document.getElementById("emailError");
+            if (emailInput.value.trim() === "") {
+                emailError.textContent = "Email is required";
+                isValid = false;
+            } else if (!isValidEmail(emailInput.value)) {
+                emailError.textContent = "Invalid email format";
+                isValid = false;
+            } else {
+                 emailError.textContent = "";
+            } */
+            return isValid;
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

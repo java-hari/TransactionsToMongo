@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<body>
+	<menu>
+		<div class="menu">
+			<a th:href="@{/userHomeScreen?(loginUser=${loginUser})}">Home</a>
+			<a th:href="@{/addExpenseItemScreen?(loginUser=${loginUser})}">Daily Expense</a>
+			<a th:href="@{/dailyExpenseReport?(loginUser=${loginUser})}">Daily Expense Report</a>
+			<a th:href="@{/monthlyExpenseReport?(loginUser=${loginUser})}">Monthly Report</a>
+			<!--<a th:href="@{/budgetOverview?(loginUser=${loginUser})}">Over View</a>-->
+		<div class="menu-log" >
+		
+			<a th:href="@{/notifications?(loginUser=${loginUser})}"><img th:src="@{images/4226663.png}" alt="notification" width="30px" height="30px"></a>
+   
+   
+			<span>Welcome, <span>[[${loginUser}]]</span></span>
+			<a th:href="@{/}"><i class="fa fa-sign-out" aria-hidden="true" ></i>Sign Out</a>
+			
+			</div>
+		</div>
+	</menu>
+</body>
+
+</html>

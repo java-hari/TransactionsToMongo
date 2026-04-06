@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}" />
+<link th:rel="stylesheet"
+	th:href="@{webjars/bootstrap/4.5.0/css/bootstrap.min.css} " />
+<link th:rel="stylesheet"
+	th:href="@{webjars/font-awesome/5.14.0/css/all.css} " />
+
+<!-- <script type="text/javascript" src="/bootstrap/4.5.0/css/bootstrap.css"></script> -->
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 mt-5">
+				<form action="#" method="post" th:object="${userDetails}"
+					th:action="@{saveUserRegister}">
+					<div class="form-group">
+						<label for="username">Username</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="username"
+								autocomplete="off" th:field="*{userName}" />
+							<div class="input-group-append">
+								<span class="input-group-text"><i
+									class="fas fa-user-lock"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<div class="input-group" id="show_hide_password">
+							<input type="password" class="form-control" id="password"
+								autocomplete="off" th:field="*{userPassword}" />
+							<div class="input-group-append">
+								<span class="input-group-text"><i class="fa fa-eye-slash"
+									aria-hidden="true"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit">Submit</button>
+						<button class="btn btn-primary" type="reset">Cancel</button>
+					</div>
+
+
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4 mt-5">
+				<!-- <form action="#" th:action="@{userDetails}"
+					th:object="${userResult}" method="post"> -->
+				<div th:if="${not #lists.isEmpty(userResult)}">
+
+					<div class="form-group">
+						<table border="1">
+							<tr align="center">
+								<td width="75px"><b><label for="userId">User Id</label></b></td>
+								<td width="120px"><b><label for="userName">User
+											Name</label></b></td>
+								<td width="120px"><b><label for="userPassword">Password</label></b></td>
+								<td width="75px"><b><label for="status">Status</label></b></td>
+								<td width="15px"><b><label for="Edit">Edit</label></b></td>
+								<td width="15px"><b><label for="Delete">Delete</label></b></td>
+							</tr>
+
+							<tr th:each="user : ${userResult}">
+								<td th:text="${user.userId}"></td>
+								<td th:text="${user.userName}"></td>
+								<td th:text="${user.userPassword}"></td>
+								<td th:text="${user.userStatus}"></td>
+
+								<td align="center">
+								<form action="#" th:action="@{UpdateUser}"
+										th:object="${updateUser}" method="post">
+										<input th:type="hidden" th:name="userId" th:value="${user.userId}" />
+										<button type="submit" class="btn btn-info">
+											<i class="fa fa-info" aria-hidden="true"></i>
+										</button>
+									</form>
+								
+								</td>
+
+								<td align="center">
+									<form action="#" th:action="@{deleteUser}"
+										th:object="${delUserId}" method="post">
+										<input th:type="hidden" th:name="userId" th:value="${user.userId}" />
+										<button type="submit" class="btn btn-danger">
+											<i class="fa fa-trash" aria-hidden="true"></i>
+										</button>
+									</form>
+								</td>
+							</tr>
+
+						</table>
+
+
+					</div>
+				</div>
+				<div class="form-group">
+					<a href="#" th:href="@{/}">Login</a>
+
+				</div>
+
+				<!-- </form> -->
+			</div>
+		</div>
+	</div>
+
+
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script>
+		var input = $("#show_hide_password input");
+		var icon = $("#show_hide_password i");
+
+		icon.on('click', function(event) {
+			event.preventDefault();
+
+			if (input.attr("type") === "text") {
+				input.attr('type', 'password');
+				icon.addClass("fa-eye-slash");
+				icon.removeClass("fa-eye");
+
+			} else if (input.attr("type") === "password") {
+				input.attr('type', 'text');
+				icon.removeClass("fa-eye-slash");
+				icon.addClass("fa-eye");
+			}
+		});
+	</script>
+</body>
+</html>

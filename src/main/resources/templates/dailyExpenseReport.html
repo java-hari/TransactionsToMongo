@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+<meta charset="ISO-8859-1">
+<title>Family Expense</title>
+</head>
+<link th:rel="stylesheet"
+	th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.css}" />
+<link th:rel="stylesheet"
+	th:href="@{webjars/bootstrap/4.5.0/css/bootstrap.min.css} " />
+<link th:rel="stylesheet"
+	th:href="@{webjars/font-awesome/5.14.0/css/all.css} " />
+<link rel="stylesheet" th:href="@{/css/headder.css}"></link>
+
+<!-- <script type="text/javascript" src="/bootstrap/4.5.0/css/bootstrap.css"></script> -->
+<body>
+	<!-- Header Section -->
+	<header th:replace="headderTitle.html :: header"> </header>
+
+	<!-- Menu Navigation Bar -->
+	<div class="menu">
+		<menu th:replace="headderMenu.html :: menu"> </menu>
+	</div>
+
+	<!-- Body section -->
+	<!-- <div class="body_sec">
+		<div class="dropdown" style="float: left;">
+			<button class="dropbtn">Stock</button>
+			<div class="dropdown-content" style="left: 0;">
+				<a href="#" th:href="@{/addItemSave}">Add On Stock</a> <a href="#"
+					th:href="@{/resultItem}">Keep Track Of </a> <a href="#">Link 3</a>
+			</div>@{/dailyExpenseReport?(loginUser=${loginUser})}
+		</div> -->
+
+		<div class="container">
+		<form th:id= "formFilter" th:action="@{/dailyExpenseSortedReport}" th:onsubmit="return validate()">
+		<!--<input type="text" class="form-control" id="loginUser" name="loginUser" th:value="${loginUser}" hidden="true" readonly="readonly"/>-->
+		<div class="row">
+			<div class="col-lg-2 mt-2">
+				<b><label for="sorting">Filter By</label></b>
+			</div>
+			<div class="col-lg-2 mt-2">
+				<div th:if="${not #lists.isEmpty(masterSource)}">
+					<select class="form-control" id="sourceSelect" name="sourceSelect" autofocus="autofocus">
+						<option value="select">Select Source</option>
+						<option th:each="test : ${masterSource}" th:value="${test.name}" th:text="${test.id}+' : '+${test.name}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="col-lg-2 mt-2">
+			<div class="form-group">
+				<b><label for="filtering">Transaction From</label></b>
+			</div>
+			
+			</div>
+			<div class="col-lg-2 mt-2">
+				<input type="date" class="form-control" id="transactionFromDate" name="transactionFromDate" th:value="${#dates.format(transactionDate, 'yyyy-MM-dd')}" />
+			</div>
+			
+			<div class="col-lg-2 mt-2">
+				<input type="date" class="form-control" id="transactionToDate" name="transactionToDate" th:value="${#dates.format(transactionDate, 'yyyy-MM-dd')}" />
+			</div>
+			<div class="col-lg-2 mt-2"></div>
+			<div class="col-lg-2 mt-2">
+				<b><label for="sorting">Sort By</label></b>
+			</div>
+			<div class="col-lg-2 mt-2">
+				<select class="form-control" name="sortSelectItem" id="sortSelectItem" onchange="enableDisableDate()">
+  					<option value="select">select</option>
+  					<option value="itemId">Item Id</option>
+  					<option value="itemName">Item Name</option>
+  					<option value="itemType">Item Type</option>
+  					<option value="transactionDate">Transaction Date</option>  					
+				</select>
+			</div>
+			
+			<div class="col-lg-2 mt-2">
+				<div class="form-group">
+					<button class="btn btn-primary" type="submit" >Run</button>
+				</div>
+			</div>
+			
+			
+		</div>
+		</form>
+				<div class="row">
+					<div class="col-lg-10 mt-2">
+						<!-- <form action="#" th:action="@{userDetails}"
+					th:object="${userResult}" method="post"> -->
+						<div th:if="${not #lists.isEmpty(dailyExpenseResult)}">
+
+							<div class="form-group">
+								<table border="1" id = "demo">
+									<tr align="center">
+										<td width="130px"><b><label for="id">Puchase
+													Id</label></b></td>
+										<td width="350px"><b><label for="itemName">Item
+													Name</label></b></td>
+										<td width="130px"><b><label for="itemPrice">Price</label></b></td>
+										<td width="130px"><b><label for="itemPrice">Sub Total</label></b></td>
+										<td width="150px"><b><label for="source">Type</label></b></td>
+										<td width="300px"><b><label for="transactionDate">Transaction Date</label></b></td>
+										<td width="300px"><b><label for="delete">Delete</label></b></td>
+
+										<!-- <td width="15px"><b><label for="Edit">Edit</label></b></td> -->
+										<!-- <td width="15px"><b><label for="Delete">Delete</label></b></td> -->
+									</tr>
+
+									<tr th:each="itmData : ${dailyExpenseResult}" >
+										<td align="center" th:text="${itmData.id}"></td>
+										<td th:text="${itmData.itemName}"></td>
+										<td align="center" th:text="${#numbers.formatCurrency(itmData.itemPrice)}">
+										<td align="center" th:text="${#numbers.formatCurrency(itmData.subTotal)}">
+
+										<!-- <td th:text="${itmData.itemPrice}"></td> -->
+										<!--<td th:text="${new java.text.DecimalFormat('$#,##0.00;(-$#,##0.00)').format(itmData.itemPrice)}"></td>
+										<td th:text="${new java.text.DecimalFormat('$#,##0.00;(-$#,##0.00)').format(itmData.subTotal)}"></td>-->
+										<!--<td th:text="${itmData.itemPrice}"></td>-->
+										<!--<td th:text="${itmData.subTotal}"></td>-->
+										<td align="center" th:text="${itmData.source}"></td>
+										<td align="center" th:text="${itmData.transactionDate}"></td>
+										<td align="center">
+											<form action="#" th:action="@{deleteExpenseById}"
+												th:object="${itmData.id}" method="post">
+												<input th:type="hidden" th:name="itemId" th:value="${itmData.id}" />
+												<button type="submit" class="btn btn-danger">
+													<i class="fa fa-trash" aria-hidden="true"></i>
+												</button>
+											</form>
+										</td>
+									</tr>
+
+								</table>
+
+
+							</div>
+						</div>
+						<div>
+
+
+							<nav aria-label="Page navigation" >
+							  <ul class="pagination" align="center">
+							    <!-- Previous Button -->
+							    <li class="page-item" th:classappend="${dailyExpenseResult.first} ? 'disabled'">
+							      <a class="page-link" th:href="@{/dailyExpenseReport(page=${dailyExpenseResult.number - 1})}">Previous</a>
+							    </li>
+
+							    <!-- Page Numbers -->
+							    <li class="page-item" 
+							        th:each="i : ${#numbers.sequence(0, dailyExpenseResult.totalPages - 1)}"
+							        th:classappend="${i == dailyExpenseResult.number} ? 'active'">
+							      <a class="page-link" th:href="@{/dailyExpenseReport(page=${i})}" th:text="${i + 1}">1</a>
+							    </li>
+
+							    <!-- Next Button -->
+							    <li class="page-item" th:classappend="${dailyExpenseResult.last} ? 'disabled'">
+							      <a class="page-link" th:href="@{/dailyExpenseReport(page=${dailyExpenseResult.number + 1})}">Next</a>
+							    </li>
+							  </ul>
+							</nav>
+
+							
+						
+						<!--<div class="row" th:fragment="pagination">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:each="pageNumber : ${pageNumbers}" >
+                        <a class="page-link" th:href="@{/dailyExpenseReport, size=${dailyExpenseResult.size}, page=${pageNumber})}" th:text=${pageNumber} >1</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-2">Total Items : [[${totalElements}]]</div>
+    </div>-->
+						
+						
+						 <!-- <div th:if="${dailyExpenseResult.totalPages > 0}" class="pagination" th:each="pageNumber : ${pageNumbers}">
+						
+    <a th:href="@{/dailyExpenseReport(size=${dailyExpenseResult.size}, page=${pageNumber})}" th:text=${pageNumber} th:class="${pageNumber==dailyExpenseResult.number + 1} ? active"></a>
+</div> -->
+						
+						<!-- <div align="center" class="page-item" th:each="i : ${#numbers.sequence(beginIndex, totalPages)} ">
+
+            <a th:href="@{/jobs(p=${i})}" th:text="${i}" class="nav-link" th:classappend="${beginIndex}==${i}?'activepagenumber':''"></a>
+                
+                </div> -->
+                <!-- Page : [[${currentPage}]] Of [[${totalPages}]] -->
+                <!-- Total No. Pages :  [[${totalPages}]]  And Total No. Records: [[${currentPage}]] -->
+                		
+						</div>
+						<!-- <span th:>
+						
+						</span>
+						<div class="form-group">
+							<a href="#" th:href="@{/}">Login</a>
+
+						</div> -->
+
+						<!-- </form> -->
+					</div>
+				</div>
+			</div>
+	
+
+
+	<!-- Footer Section -->
+	<!-- <footer>Footer Section</footer> -->
+
+	<!-- <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+	<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script> -->
+
+
+
+<script th:inline="javascript">
+
+function enableDisableDate(){
+	if(document.getElementById("sortSelectItem").value === "select"){
+		document.getElementById("transactionFromDate").disabled = false;
+		document.getElementById("transactionToDate").disabled = false;
+	}else{
+		document.getElementById("transactionFromDate").disabled = true;
+		document.getElementById("transactionToDate").disabled = true;
+	}
+	
+}
+function validate(){
+	let ssi = document.getElementById("sortSelectItem").value;
+	let ss = document.getElementById("sourceSelect").value;
+	let tfd = document.getElementById("transactionFromDate").value;
+	if(ssi === "select" && ss === "select" && tfd === ""){
+		alert("Select one of the filters");
+		return false; 
+	}
+	
+	let dateFrom = new Date(document.getElementById("transactionFromDate").value);
+	let dateTo = new Date(document.getElementById("transactionToDate").value);
+	if(dateFrom > dateTo){
+		alert("From Date is Greater Than To Date")
+		return false;
+	}
+	
+}
+
+function previousPage(){
+	alert("previousPage");
+}
+function nextPage(){
+	alert("nextPage");
+}
+</script>
+</body>
+</html>

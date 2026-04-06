@@ -1,0 +1,57 @@
+<!DOCTYPE html> 
+<html xmlns:th="https://www.thymeleaf.org"> 
+<head> 
+
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.5.0/css/bootstrap.min.css}">
+  <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/4.5.0/js/bootstrap.min.js}"></script>
+  <link rel="stylesheet" th:href="@{/css/headder.css}"></link>
+  
+	<title>Family Expense</title>
+	</head> 
+	
+	<!-- Header Section -->
+	<header th:replace="headderTitle.html :: header"> </header>
+	
+	<!-- <header> 
+		<div class="head1"> Hari Rentala</div> 
+		<div class="head2">The Application For Family Budget</div> 
+	</header> -->
+	
+	
+	<!-- Menu Navigation Bar -->
+	
+	<div class="menu">
+	<menu th:replace="headderMenu.html :: menu"> </menu>
+		<!-- <a href="#home" th:href="@{/userHomeScreen}">Home</a> <a href="#" th:href="@{/addExpenseItemScreen}">Daily Expense</a> <a href="#notification">Monthly Expense</a><a href="#" th:href="@{/dailyExpenseReport}">Daily Expense Report</a> 
+		<div class="menu-log"> 
+			<a href="#" th:href="@{/}"><i class="fa fa-sign-out" aria-hidden="true"></i>Sign Out
+</a> 
+		</div> --> 
+	</div>
+	<!-- Body section -->
+	<div class = "body_sec"> 
+	
+	
+        <h6>Home</h6>
+        <img th:src="@{images/Excel-charts-11.png}" alt="cat">
+    
+	
+	<!-- <div class="dropdown" style="float:left;">
+  <button class="dropbtn">Stock</button>
+  <div class="dropdown-content" style="left:0;">
+    <a href="#" th:href="@{/addItemScreen}">Add On Stock</a>
+    <a href="#" th:href="@{/resultItem}">Keep Track Of </a>
+    <a href="#">Link 3</a>
+  </div>
+</div> -->
+		<section id="Content"> 
+			<h3>Content section</h3> 
+		</section> 
+	</div> 
+	
+	<!-- Footer Section -->
+	<footer>Footer Section</footer> 
+</body> 
+
+</html>			 
