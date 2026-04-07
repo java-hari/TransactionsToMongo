@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: springboot-app
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    #port: 8080
+    envVars:
+      - key: MONGODB_URI
+        sync: false        # means you set it manually in dashboard
+      - key: PORT
+        value: 8080
